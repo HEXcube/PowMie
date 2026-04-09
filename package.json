@@ -2,6 +2,7 @@
   "name": "powmie",
   "private": true,
   "version": "1.0.0",
+  "author": "Rohan Villoth",
   "type": "module",
   "scripts": {
     "dev": "vite",

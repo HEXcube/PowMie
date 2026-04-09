@@ -1,7 +1,7 @@
 # PowMie
 Squish your goals with PowMie, the cutest Pomodoro timer!
 
-[Open PowMie!](https://HEXcube.github.io/PowMie/)
+[Open PowMie!](https://HEXcube.github.io/PowMie)
 
 ## Local Development
 
