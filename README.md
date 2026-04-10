@@ -1,12 +1,12 @@
-# PowMie
-Squish your goals with PowMie, the cutest Pomodoro timer!
+# PwoMie
+Squish your goals with PwoMie, the cutest Pomodoro timer!
 
-[Open PowMie!](https://HEXcube.github.io/PowMie)
+[Open PwoMie!](https://HEXcube.github.io/PwoMie)
 
 ## Local Development
 
 Prerequisites:
-- [Node.js](https://nodejs.org/) (Version 18+)
+- [Node.js](https://nodejs.org/) (Version 24+)
 
 ```bash
 # Install dependencies

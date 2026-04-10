@@ -3,15 +3,15 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/PowMie/',
+  base: '/PwoMie/',
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'PowMie Pomodoro',
-        short_name: 'PowMie',
+        name: 'PwoMie Pomodoro',
+        short_name: 'PwoMie',
         description: 'A cute Pomodoro timer by Rohan Villoth',
         theme_color: '#f43f5e',
         background_color: '#fff1f2',
