@@ -26,12 +26,48 @@ const playChime = () => {
   }
 };
 
+const playPop = () => {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.1);
+    gainNode.gain.setValueAtTime(0, ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.1);
+  } catch (e) {}
+};
+
+const playClick = () => {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(600, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.05);
+    gainNode.gain.setValueAtTime(0, ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.05);
+  } catch (e) {}
+};
+
 // Character definitions for our cute companions
 const CREATURE_TYPES = [
-  { active: '( • ω • )', breakFace: '( u w u )', breakActivity: 'Zzz', wait: '( • _ • )' },
-  { active: '( ◕ ▿ ◕ )', breakFace: '( ˘ ▽ ˘ )', breakActivity: '☕', wait: '( ◕ _ ◕ )' },
-  { active: '( ^ ᴗ ^ )', breakFace: '( ᵕ ᴗ ᵕ )', breakActivity: '📖', wait: '( º _ º )' },
-  { active: '( ˶ˆ꒳ˆ˵ )', breakFace: '( ˘ ᵕ ˘ )', breakActivity: '🎵', wait: '( ˶-.-˵ )' }
+  { active: '• ω •', breakFace: 'u w u', breakActivity: 'Zzz', wait: '• _ •' },
+  { active: '◕ ▿ ◕', breakFace: '˘ ▽ ˘', breakActivity: '☕', wait: '◕ _ ◕' },
+  { active: '^ ᴗ ^', breakFace: 'ᵕ ᴗ ᵕ', breakActivity: '📖', wait: 'º _ º' },
+  { active: '˶ˆ꒳ˆ˵', breakFace: '˘ ᵕ ˘', breakActivity: '🎵', wait: '˶-.-˵' }
 ];
 
 const Creature = ({ isRunning, isWork, index }) => {
@@ -81,7 +117,7 @@ const Creature = ({ isRunning, isWork, index }) => {
     activity = type.breakActivity;
   } else if (!isRunning) {
     face = type.wait;
-    activity = '...';
+    activity = '';
   }
 
   return (
@@ -98,10 +134,12 @@ const Creature = ({ isRunning, isWork, index }) => {
          ${!isWork && isRunning ? 'animate-bounce text-sky-400 opacity-100' : 'text-rose-300 opacity-70'}
          ${isWork && isRunning ? 'opacity-0' : ''} 
        `}>
-         {activity}
+         {activity || ' '}
        </div>
-       <div className={`px-4 py-2 rounded-full flex items-center justify-center backdrop-blur-sm transition-colors duration-1000 shadow-sm
-         ${isWork ? 'bg-rose-200/40 text-rose-500' : 'bg-sky-200/40 text-sky-600'}
+       <div 
+         onClick={playPop}
+         className={`w-20 h-20 blob-${index % 4} active:scale-90 active:animate-none flex items-center justify-center backdrop-blur-sm transition-all duration-300 shadow-sm pointer-events-auto cursor-pointer
+         ${isWork ? 'bg-rose-200/40 text-rose-500 hover:bg-rose-300/60' : 'bg-sky-200/40 text-sky-600 hover:bg-sky-300/60'}
        `}>
          <span className="text-sm font-bold tracking-widest whitespace-nowrap">{face}</span>
        </div>
@@ -150,14 +188,19 @@ export default function App() {
     document.title = `${timeString} - ${isWork ? 'Focus' : 'Break'}`;
   }, [timeLeft, isWork]);
 
-  const toggleTimer = () => setIsRunning(!isRunning);
+  const toggleTimer = () => {
+    playClick();
+    setIsRunning(!isRunning);
+  };
 
   const resetTimer = () => {
+    playClick();
     setIsRunning(false);
     setTimeLeft(isWork ? WORK_TIME : BREAK_TIME);
   };
 
   const skipSession = () => {
+    playClick();
     if (isWork) {
       setSessionsCompleted(prev => prev + 1);
       setIsWork(false);
@@ -212,10 +255,10 @@ export default function App() {
         
         {/* Mode Indicators */}
         <div className="flex space-x-4 mb-8 sm:mb-12 font-medium tracking-wide text-sm sm:text-base">
-          <span className={`px-4 py-1.5 rounded-full transition-colors duration-500 ${isWork ? theme.activePill : theme.inactivePill}`}>
+          <span className={`px-4 py-1.5 blob-btn transition-colors duration-500 ${isWork ? theme.activePill : theme.inactivePill}`}>
             focus
           </span>
-          <span className={`px-4 py-1.5 rounded-full transition-colors duration-500 ${!isWork ? theme.activePill : theme.inactivePill}`}>
+          <span className={`px-4 py-1.5 blob-btn transition-colors duration-500 ${!isWork ? theme.activePill : theme.inactivePill}`}>
             break
           </span>
         </div>
@@ -229,7 +272,7 @@ export default function App() {
         <div className="flex items-center space-x-6 sm:space-x-8">
           <button 
             onClick={resetTimer}
-            className={`p-4 rounded-full transition-all duration-300 ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50 ${theme.ringColor}`}
+            className={`p-4 blob-btn transition-all duration-300 hover:scale-105 active:scale-95 active:animate-none ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50 ${theme.ringColor}`}
             aria-label="Reset timer"
           >
             <RotateCcw size={28} strokeWidth={2} />
@@ -237,7 +280,7 @@ export default function App() {
 
           <button 
             onClick={toggleTimer}
-            className={`p-6 rounded-full transition-all duration-300 transform hover:scale-105 ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50 ${theme.ringColor}`}
+            className={`p-6 blob-btn transition-all duration-300 transform hover:scale-110 active:scale-95 active:animate-none ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50 ${theme.ringColor}`}
             aria-label={isRunning ? "Pause timer" : "Start timer"}
           >
             {isRunning ? (
@@ -249,7 +292,7 @@ export default function App() {
 
           <button 
             onClick={skipSession}
-            className={`p-4 rounded-full transition-all duration-300 ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50 ${theme.ringColor}`}
+            className={`p-4 blob-btn transition-all duration-300 hover:scale-105 active:scale-95 active:animate-none ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50 ${theme.ringColor}`}
             aria-label="Skip session"
           >
             <SkipForward size={28} strokeWidth={2} />
