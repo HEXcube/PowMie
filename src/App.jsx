@@ -180,14 +180,16 @@ export default function App() {
         text: 'text-rose-400',
         buttonHover: 'hover:bg-rose-100',
         activePill: 'bg-rose-200 text-rose-600',
-        inactivePill: 'text-rose-300'
+        inactivePill: 'text-rose-300',
+        ringColor: 'focus:ring-rose-400'
       }
     : {
         bg: 'bg-sky-50',
         text: 'text-sky-400',
         buttonHover: 'hover:bg-sky-100',
         activePill: 'bg-sky-200 text-sky-600',
-        inactivePill: 'text-sky-300'
+        inactivePill: 'text-sky-300',
+        ringColor: 'focus:ring-sky-400'
       };
 
   return (
@@ -227,7 +229,7 @@ export default function App() {
         <div className="flex items-center space-x-6 sm:space-x-8">
           <button 
             onClick={resetTimer}
-            className={`p-4 rounded-full transition-all duration-300 ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50`}
+            className={`p-4 rounded-full transition-all duration-300 ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50 ${theme.ringColor}`}
             aria-label="Reset timer"
           >
             <RotateCcw size={28} strokeWidth={2} />
@@ -235,7 +237,7 @@ export default function App() {
 
           <button 
             onClick={toggleTimer}
-            className={`p-6 rounded-full transition-all duration-300 transform hover:scale-105 ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50`}
+            className={`p-6 rounded-full transition-all duration-300 transform hover:scale-105 ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50 ${theme.ringColor}`}
             aria-label={isRunning ? "Pause timer" : "Start timer"}
           >
             {isRunning ? (
@@ -247,7 +249,7 @@ export default function App() {
 
           <button 
             onClick={skipSession}
-            className={`p-4 rounded-full transition-all duration-300 ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50`}
+            className={`p-4 rounded-full transition-all duration-300 ${theme.text} ${theme.buttonHover} focus:outline-none focus:ring-2 focus:ring-opacity-50 ${theme.ringColor}`}
             aria-label="Skip session"
           >
             <SkipForward size={28} strokeWidth={2} />
